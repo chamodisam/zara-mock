@@ -15,8 +15,6 @@ function Woman() {
         fetchAllProducts();
     }, [fetchAllProducts]);
 
-    console.log(products);
-
     return (
         <Box sx={{ paddingTop: '20px', display: 'flex', justifyContent: 'center', margin: 5}}>
             <Grid2 
