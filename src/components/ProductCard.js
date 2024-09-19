@@ -15,7 +15,13 @@ function ProductCard({ item }) {
 
   function renderAddToCart() {
     if (!!itemCartInfo) {
-      return <QuantityPicker onAdd={handleAddToCart} quantity={itemCartInfo.quantity}/>
+      return (
+        <QuantityPicker
+          onAdd={handleAddToCart}
+          onRemove={handleRemoveFromCart}
+          quantity={itemCartInfo.quantity}
+        />
+      );
     }
     return (
       <IconButton sx={{ borderRadius: 0 }} onClick={handleAddToCart}>
@@ -60,29 +66,53 @@ function ProductCard({ item }) {
     setCartItems(response.data.items);
   };
 
-    return (
-        <Card sx={{ height: '100%', width: 350, display: 'flex', flexDirection: 'column'}}>
-        <CardMedia
-          component="img"
-          height="300"
-          image={item.image}
-          sx={{ objectFit: 'contain' }}
-        />
-        <CardContent>
-        <TextTruncate
-            line={1}
-            element="span"
-            truncateText="…"
-            text={item.title}
-        />
-        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-          <span>
-            {`$ ${item.price}`}
-          </span>
-          {renderAddToCart()}
-        </Box>
-        </CardContent>
-      </Card>
+  const handleRemoveFromCart = async () => {
+    const updatedItems = itemCartInfo.quantity > 1
+      ? cartItems.map(cartItem => {
+        return cartItem.item_id !== item.id
+          ? cartItem
+          : {
+            item_id: item.id,
+            quantity: cartItem.quantity - 1,
+            price: item.price,
+          } 
+        })
+      : cartItems.filter(i => i.item_id !== item.id);
+
+    const response = await axios.put(
+      'http://localhost:3001/carts/20',
+      {
+        id: 20,
+        user_id: 33,
+        items: updatedItems
+      }
+    );
+    setCartItems(response.data.items);
+  };
+
+  return (
+      <Card sx={{ height: '100%', width: 350, display: 'flex', flexDirection: 'column'}}>
+      <CardMedia
+        component="img"
+        height="300"
+        image={item.image}
+        sx={{ objectFit: 'contain' }}
+      />
+      <CardContent>
+      <TextTruncate
+          line={1}
+          element="span"
+          truncateText="…"
+          text={item.title}
+      />
+      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        <span>
+          {`$ ${item.price}`}
+        </span>
+        {renderAddToCart()}
+      </Box>
+      </CardContent>
+    </Card>
     );
 }
 
