@@ -1,23 +1,53 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
-import { Box, Card, CardMedia, CardContent, Typography, IconButton, Icon } from '@mui/material';
-import TextTruncate from 'react-text-truncate';
 import AddIcon from '@mui/icons-material/Add';
+import { Box, Card, CardMedia, CardContent, IconButton } from '@mui/material';
+import TextTruncate from 'react-text-truncate';
+
+import QuantityPicker from "./QuantityPicker";
+import useItemCartInfoForProduct from "../hooks/useItemCartInfoForProduct";
 
 import CartContext from '../contexts/cart';
 
 function ProductCard({ item }) {
   const { cartItems, setCartItems } = useContext(CartContext);
+  const { itemInfo: itemCartInfo } = useItemCartInfoForProduct({cartItems, productID: item.id});
+
+  function renderAddToCart() {
+    if (!!itemCartInfo) {
+      return <QuantityPicker onAdd={handleAddToCart} quantity={itemCartInfo.quantity}/>
+    }
+    return (
+      <IconButton sx={{ borderRadius: 0 }} onClick={handleAddToCart}>
+          <AddIcon />
+      </IconButton>
+    );
+  }
 
   const handleAddToCart = async () => {
-    const updatedItems = [
-      ...cartItems,
-      {
-        item_id: item.id,
-        quantity: 1,
-        price: item.price,
-      }
-    ]
+    const newQuantity = !!itemCartInfo
+      ? itemCartInfo.quantity + 1
+      : 1;
+
+    const itemInCart = cartItems.find(i => i.item_id === item.id);
+    const updatedItems = !!itemInCart
+      ? cartItems.map(cartItem => {
+        return cartItem.item_id !== item.id
+          ? cartItem
+          : {
+            item_id: item.id,
+            quantity: newQuantity,
+            price: item.price,
+          } 
+        })
+      : [
+          ...cartItems,
+          {
+            item_id: item.id,
+            quantity: 1,
+            price: item.price,
+          }
+        ];
 
     const response = await axios.put(
       'http://localhost:3001/carts/20',
@@ -49,9 +79,7 @@ function ProductCard({ item }) {
           <span>
             {`$ ${item.price}`}
           </span>
-          <IconButton sx={{ borderRadius: 0 }} onClick={handleAddToCart}>
-            <AddIcon />
-          </IconButton>
+          {renderAddToCart()}
         </Box>
         </CardContent>
       </Card>
