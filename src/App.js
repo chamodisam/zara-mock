@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import Help from './pages/Help';
 import Home from './pages/Home';
 import Woman from './pages/Woman';
+import Cart from './pages/Cart';
 
 import CartContext from './contexts/cart';
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/woman" element={<Woman />} />
         <Route path="/help" element={<Help />} /> 
+        <Route path="/cart" element={<Cart />} /> 
       </Routes>
     </Router>
   );

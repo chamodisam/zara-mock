@@ -43,10 +43,12 @@ function NavBar() {
               </Box>
               <Box sx={{ display: 'flex', gap: '4px', fontWeight: 'bold', alignItems: 'center'}}>
                 {/* Shopping Bag Icon */}
-                <IconButton aria-label="shopping bag">
-                  <ShoppingBagIcon style={{ color: 'black' }} />
-                </IconButton>
-                <Typography style={{ color: 'black' }}>{`(${total})`}</Typography>
+                <Link to='/cart'>
+                  <IconButton aria-label="shopping bag">
+                    <ShoppingBagIcon style={{ color: 'black' }} />
+                  </IconButton>
+                </Link>
+                  <Typography style={{ color: 'black' }}>{`(${total})`}</Typography>
               </Box>
             </Box>
           </Toolbar>

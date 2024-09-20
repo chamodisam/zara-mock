@@ -84,11 +84,15 @@
       "items": [
         {
           "item_id": "15",
+          "title": "BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats",
+          "image": "https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_.jpg",
           "quantity": 6,
           "price": 56.99
         },
         {
           "item_id": "16",
+          "title": "Lock and Love Women's Removable Hooded Faux Leather Moto Biker Jacket",
+          "image": "https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_.jpg",
           "quantity": 2,
           "price": 29.95
         }
