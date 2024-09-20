@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import axios from "axios";
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Card, CardMedia, CardContent, IconButton } from '@mui/material';
@@ -10,7 +10,7 @@ import useItemCartInfoForProduct from "../hooks/useItemCartInfoForProduct";
 import CartContext from '../contexts/cart';
 
 function ProductCard({ item }) {
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const { cartItems, setCartItems, totalQuantity, setTotalQuantity } = useContext(CartContext);
   const { itemInfo: itemCartInfo } = useItemCartInfoForProduct({cartItems, productID: item.id});
 
   function renderAddToCart() {
@@ -41,16 +41,15 @@ function ProductCard({ item }) {
         return cartItem.item_id !== item.id
           ? cartItem
           : {
-            item_id: item.id,
+            ...cartItem,
             quantity: newQuantity,
-            price: item.price,
           } 
         })
       : [
           ...cartItems,
           {
             item_id: item.id,
-            quantity: 1,
+            quantity: newQuantity,
             price: item.price,
           }
         ];
@@ -60,10 +59,12 @@ function ProductCard({ item }) {
       {
         id: 20,
         user_id: 33,
-        items: updatedItems
+        items: updatedItems,
+        total_quantity: totalQuantity + 1,
       }
     );
     setCartItems(response.data.items);
+    setTotalQuantity(response.data.total_quantity);
   };
 
   const handleRemoveFromCart = async () => {
@@ -84,10 +85,12 @@ function ProductCard({ item }) {
       {
         id: 20,
         user_id: 33,
-        items: updatedItems
+        items: updatedItems,
+        total_quantity: totalQuantity - 1,
       }
     );
     setCartItems(response.data.items);
+    setTotalQuantity(response.data.total_quantity);
   };
 
   return (
@@ -99,13 +102,13 @@ function ProductCard({ item }) {
         sx={{ objectFit: 'contain' }}
       />
       <CardContent>
+          
       <TextTruncate
           line={1}
-          element="span"
           truncateText="…"
           text={item.title}
       />
-      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: '3px'}}>
         <span>
           {`$ ${item.price}`}
         </span>

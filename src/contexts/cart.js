@@ -3,9 +3,12 @@ import { createContext, useState } from "react";
 const CartContext = createContext();
 function CartProvider({ children }) {
     const [cartItems, setCartItems] = useState([]);
+    const [totalQuantity, setTotalQuantity] = useState(0);
     const valuesToShare = {
         cartItems,
         setCartItems,
+        totalQuantity,
+        setTotalQuantity,
     };
 
     return (

@@ -10,11 +10,12 @@ import Woman from './pages/Woman';
 import CartContext from './contexts/cart';
 
 function App() {
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const { setCartItems, setTotalQuantity } = useContext(CartContext);
 
   const fetchCartItems = useCallback(async () => {
     const response = await axios.get('http://localhost:3001/carts/20');
     setCartItems(response.data.items);
+    setTotalQuantity(response.data.total_quantity);
   }, []);
 
   useEffect(() => {
@@ -22,15 +23,14 @@ function App() {
   }, [fetchCartItems]);
 
   return (
-      <Router>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/woman" element={<Woman />} />
-          <Route path="/help" element={<Help />} /> 
-        </Routes>
-      </Router>
-    // </Container>
+    <Router>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/woman" element={<Woman />} />
+        <Route path="/help" element={<Help />} /> 
+      </Routes>
+    </Router>
   );
 }
 
