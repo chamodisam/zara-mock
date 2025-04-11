@@ -38,7 +38,7 @@ function NavBar() {
                 </Box>
                 
                 {/* Utility Links */}
-                <Typography style={{ color: 'black' }}>LOG IN</Typography>
+                <Link to="/log-in" style={{ textDecoration: 'none' }}><Typography style={{ color: 'black' }}>LOG IN</Typography></Link>
                 <Link to="/help" style={{ textDecoration: 'none' }}><Typography style={{ color: 'black' }}>HELP</Typography></Link>
               </Box>
               <Box sx={{ display: 'flex', gap: '4px', fontWeight: 'bold', alignItems: 'center'}}>
