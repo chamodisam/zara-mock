@@ -1,7 +1,29 @@
+import { useContext } from "react";
+import axios from "axios";
 import { Box, Typography, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'; // This will be the "X" icon
 
+import CartContext from '../contexts/cart';
+
 function CartRow({ item }) {
+  const { cartItems, setCartItems, totalQuantity, setTotalQuantity } = useContext(CartContext);
+
+  const handleRemoveFromCart = async () => {
+    const updatedItems = cartItems.filter(i => i.item_id !== item.item_id);
+
+    const response = await axios.put(
+      'http://localhost:3001/carts/20',
+      {
+        id: 20,
+        user_id: 33,
+        items: updatedItems,
+        total_quantity: totalQuantity - item.quantity,
+      }
+    );
+    setCartItems(response.data.items);
+    setTotalQuantity(response.data.total_quantity);
+  };
+
   return (
     <Box
       sx={{
@@ -47,7 +69,7 @@ function CartRow({ item }) {
 
       {/* Remove Button */}
       <Box sx={{ paddingLeft: '20px' }}>
-        <IconButton aria-label="remove">
+        <IconButton aria-label="remove" onClick={handleRemoveFromCart}>
           <DeleteIcon />
         </IconButton>
       </Box>

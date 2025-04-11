@@ -37,7 +37,7 @@ function ProductCard({ item }) {
 
     const itemInCart = cartItems.find(i => i.item_id === item.id);
     const updatedItems = !!itemInCart
-      ? cartItems.map(cartItem => {
+      ? cartItems.map(cartItem => { // updating existing item in cart
         return cartItem.item_id !== item.id
           ? cartItem
           : {
@@ -45,12 +45,14 @@ function ProductCard({ item }) {
             quantity: newQuantity,
           } 
         })
-      : [
+      : [ // adding new item to cart
           ...cartItems,
           {
             item_id: item.id,
             quantity: newQuantity,
             price: item.price,
+            title: item.title,
+            image: item.image,
           }
         ];
 
