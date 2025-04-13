@@ -12,7 +12,7 @@ const PORT = 5005;
 app.use(cors());
 app.use(bodyParser.json());
 
-const filePath = path.resolve(__dirname, "../../db_user.json");
+const filePath = path.resolve(__dirname, "../../db.json");
 
 // confirm file path
 if (!fs.existsSync(filePath)) {
@@ -38,7 +38,14 @@ async function initDB() {
   await db.write();
 }
 
-initDB();
+initDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Auth service running at http://localhost:${PORT}`);
+    });
+}).catch(err => {
+    console.error("Failed to initialize database", err);
+    process.exit(1); // exit if DB init fails
+});
 
 //TODO: add password hashing
 
@@ -66,9 +73,9 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
   
-    res.status(200).json({ message: "Login successful", token: "fake-jwt-token", user: { email } });
+    res.status(200).json({ message: "Login successful", token: "fake-jwt-token", user: { "user_id": user.user_id } });
 });
 
-app.listen(PORT, () => {
-    console.log(`Auth service running at http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Auth service running at http://localhost:${PORT}`);
+// });
