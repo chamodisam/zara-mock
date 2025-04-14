@@ -3,12 +3,17 @@ import { AppBar, Toolbar, Typography, InputBase, IconButton, Box, Button } from 
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { If, Then, Else } from 'react-if';
 
 import CartContext from '../contexts/cart';
+import { useAuth } from '../auth/AuthContext';
 
 function NavBar() {
     const { totalQuantity } = useContext(CartContext);
     const [total, setTotal] = useState(totalQuantity);
+    const { user, logout } = useAuth();
+
+    console.log(user);
 
     useEffect(() => {
       setTotal(totalQuantity);
@@ -38,7 +43,14 @@ function NavBar() {
                 </Box>
                 
                 {/* Utility Links */}
-                <Link to="/log-in" style={{ textDecoration: 'none' }}><Typography style={{ color: 'black' }}>LOG IN</Typography></Link>
+                <If condition={!user}>
+                  <Then>
+                    <Link to="/log-in" style={{ textDecoration: 'none' }}><Typography style={{ color: 'black' }}>LOG IN</Typography></Link>
+                  </Then>
+                  <Else>
+                    <Typography component="span" style={{ color: 'black' }} onClick={logout}>{user?.firstname?.toUpperCase() || 'LOG OUT'}</Typography>
+                  </Else>
+                </If>
                 <Link to="/help" style={{ textDecoration: 'none' }}><Typography style={{ color: 'black' }}>HELP</Typography></Link>
               </Box>
               <Box sx={{ display: 'flex', gap: '4px', fontWeight: 'bold', alignItems: 'center'}}>

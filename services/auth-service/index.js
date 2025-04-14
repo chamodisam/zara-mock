@@ -73,7 +73,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
   
-    res.status(200).json({ message: "Login successful", token: "fake-jwt-token", user: { "user_id": user.user_id } });
+    res.status(200).json({ message: "Login successful", token: "fake-jwt-token", user: { "user_id": user.user_id, "firstname": user.firstname } });
 });
 
 // app.listen(PORT, () => {
