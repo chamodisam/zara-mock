@@ -8,10 +8,12 @@ import QuantityPicker from "./QuantityPicker";
 import useItemCartInfoForProduct from "../hooks/useItemCartInfoForProduct";
 
 import CartContext from '../contexts/cart';
+import { useAuth } from "../auth/AuthContext";
 
 function ProductCard({ item }) {
-  const { cartItems, setCartItems, totalQuantity, setTotalQuantity } = useContext(CartContext);
+  const { cartItems, setCartItems, totalQuantity, setTotalQuantity, cartId } = useContext(CartContext);
   const { itemInfo: itemCartInfo } = useItemCartInfoForProduct({cartItems, productID: item.id});
+  const { user } = useAuth();
 
   function renderAddToCart() {
     if (!!itemCartInfo) {
@@ -57,10 +59,10 @@ function ProductCard({ item }) {
         ];
 
     const response = await axios.put(
-      'http://localhost:3001/carts/20',
+      `http://localhost:3001/carts/${cartId}`,
       {
-        id: 20,
-        user_id: 33,
+        id: cartId,
+        user_id: user.user_id,
         items: updatedItems,
         total_quantity: totalQuantity + 1,
       }
@@ -85,8 +87,8 @@ function ProductCard({ item }) {
     const response = await axios.put(
       'http://localhost:3001/carts/20',
       {
-        id: 20,
-        user_id: 33,
+        id: cartId,
+        user_id: user.user_id,
         items: updatedItems,
         total_quantity: totalQuantity - 1,
       }
